@@ -1,0 +1,598 @@
+(function($) {
+    "use strict";
+    var aadi_page = {
+		 		htmlTopPOs : function(){
+					var hHeight = ($('.aadi-header.aadi-header-sticky:visible').not('.aadi-header-transparent').outerHeight());
+					if(!hHeight){hHeight = 0;}
+				// 	console.log(hHeight)
+               $('html').css({'padding-top': hHeight});
+				},
+            init: function() {
+                $('.ad-drop-nav').on('click', function(e) {
+                    $('.our-work-listing-element').toggleClass('active');
+                    e.stopPropagation();
+                });
+                $('body').on("click", function(ev) {
+                    $('.our-work-listing-element').removeClass('active');
+                });
+                $('.ad-vertical-tab-content:eq(0)').addClass('active');
+                if (local_vars.sticky_header == 1) {
+                    aadi_page.htmlTopPOs();
+							$(window).resize(function(){
+								aadi_page.htmlTopPOs();
+							});
+                }
+                if ($('.bg-feature-services').length > 0) {
+                    var s_height = $('.bg-feature-services').outerHeight();
+                    $('.bg-feature-services-image').css('height', s_height);
+                }
+                aadi_page.aadi_ajaxcall();
+                aadi_page.aadi_animations();
+                aadi_page.aadi_loadmorecall();
+                aadi_page.additab_acc();
+                aadi_page.additab_acc('.services-wrapper-tab-links-wrapper li', '.our-services-tabs-desc-wrapper .our-services-tabs-desc', true);
+                aadi_page.additab_acc('.our-history-tab-block li', '.our-history-tab-content-wrap .weclome-section-content');
+                $('.fitvid').fitVids();
+                $(document).delegate('.ad-menu-overlay-icon a', 'click', function(e) {
+                    e.preventDefault();
+                    $('.menu-overlay-wrapper').toggleClass('menu-overlay-top menu-overlay-open menu-overlay-complete menu-overlay-bottom');
+                    $('.c-hamburger.c-hamburger--htx').toggleClass('is-active');
+                    $('body').toggleClass('scroll-disable');
+                });
+                $('.ad-serach-form #s').val('');
+                $('.slimmenu').slimmenu({
+                    resizeWidth: '992',
+                    collapserTitle: 'Menu',
+                    animSpeed: 'medium',
+                    indentChildren: true,
+                    childrenIndenter: '<i class="fa fa-angle-right" aria-hidden="true"></i>',
+                    expandIcon: '<i class="fa fa-plus" aria-hidden="true"></i>',
+                    collapseIcon: '<i class="fa fa-minus" aria-hidden="true"></i>'
+                });
+                $(window).on('load', function() {
+                    $(".siteloader").fadeOut("slow");
+                    if ($('.fitheight-wrapper').length > 0) {
+                        $('.fitheight-wrapper').each(function() {
+                            var height = [];
+                            $(this).find(".fitheight").each(function() {
+                                height.push($(this).outerHeight());
+                            });
+                            $(this).find('.fitheight').css("min-height", Math.max.apply(Math, height));
+                        });
+                    }
+                    if ($('.bg-feature-services').length > 0) {
+                        var s_height = $('.bg-feature-services').outerHeight();
+                        $('.bg-feature-services-image').css('height', s_height);
+                    }
+                    $('.aadi-footer-parallax').aadi_footer_parallax();
+                    if ($('.fixed-footer').length > 0) {
+                        var hei = $('.fixed-footer').outerHeight();
+                        $('#content').css('padding-bottom', hei);
+                    }
+                });
+                $(".ad-menu > li").on('mouseenter mouseleave', function(e) {
+                    if ($('ul', this).length) {
+                        var elm = $('ul:first', this);
+                        var off = elm.offset();
+                        var l = off.left;
+                        var w = elm.width();
+                        var docW = $("body").width();
+                        var isEntirelyVisible = (l + w <= docW);
+                        if (!isEntirelyVisible) {
+                            $(this).addClass('edge');
+                        }
+                    }
+                });
+                var autoplay = [];
+                autoplay[0] = false;
+                autoplay[1] = true;
+                $('.slideshow').slick({
+                    dots: false,
+                    infinite: true,
+                    speed: local_vars.speed,
+                    fade: true,
+                    autoplay: autoplay[local_vars.autoplay],
+                    cssEase: 'linear',
+                    prevArrow: '<a class="slick-prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a>',
+                    nextArrow: '<a class="slick-next"><i class="fa fa-angle-right" aria-hidden="true"></i></a>',
+                });
+                var $container = $('ul.our-work-gallery-grid');
+                $(window).load(function() {
+                    $container.isotope({
+                        filter: '*',
+                        animationOptions: {
+                            duration: 750,
+                            easing: 'linear',
+                            queue: false
+                        },
+                        layoutMode: 'fitRows'
+                    });
+                });
+                $('.ad-tabs ul.our-work-listing-element li a').click(function() {
+                    $('.our-work-listing-element').toggleClass('active');
+                    $('.ad-tabs ul.our-work-listing-element li').removeClass('active');
+                    $(this).closest('li').addClass('active');
+                    var selector = $(this).attr('data-filter');
+                    $container.isotope({
+                        filter: selector,
+                        layoutMode: 'fitRows',
+                        animationOptions: {
+                            duration: 750,
+                            easing: 'linear',
+                            queue: false
+                        }
+                    });
+                    return false;
+                });
+            },
+            aadi_animations: function() {
+                var controller = $.superscrollorama({
+                    reverse: false,
+                    triggerAtCenter: true
+                });
+                var duration = 0;
+                controller.addTween('.animatethis-wrapper', TweenMax.from($('.animatethis'), 1, {
+                    opacity: 0,
+                    x: 90,
+                    ease: Power4.easeInOut
+                }), duration);
+                controller.addTween('.animatethis-wrapper', TweenMax.from($('.left-animate'), 1, {
+                    opacity: 0,
+                    x: -90,
+                    ease: Power4.easeInOut
+                }), duration);
+                controller.addTween('.bottom-animate', TweenMax.from($('.bottom-animate'), 1, {
+                    opacity: 0,
+                    y: 90,
+                    ease: Power4.easeInOut
+                }), duration);
+                controller.addTween('.animatethis-wrapper', TweenMax.from($('.right-animate'), 1, {
+                    opacity: 0,
+                    x: 90,
+                    ease: Power4.easeInOut
+                }), duration);
+                controller.addTween('.fade-it', TweenMax.from($('.fade-it'), 1, {
+                    css: {
+                        opacity: 0
+                    }
+                }));
+                controller.addTween('.spin-it', TweenMax.from($('.spin-it'), 1, {
+                    css: {
+                        opacity: 0,
+                        rotation: 180
+                    },
+                    ease: Quad.easeOut
+                }));
+                $("#back-top").hide();
+                $(window).scroll(function() {
+                    if ($(this).scrollTop() > 700) {
+                        $('#back-top').fadeIn(0);
+                    } else {
+                        $('#back-top').fadeOut(0);
+                    }
+                });
+                $('#back-top a').click(function(e) {
+                    e.preventDefault();
+                    $('body,html').animate({
+                        scrollTop: 0
+                    }, 2000);
+                    return false;
+                });
+            },
+            aadi_ajax: function(e, element, data_values, method_type) {
+                var $t = element;
+                $.ajax({
+                    url: ajaxurl,
+                    type: method_type,
+                    data: data_values,
+                    beforeSend: function(e) {
+                        $t.closest('form').find('.loader-icon').html('<img src="' + aadi_imgurl + 'reload.gif">');
+                    },
+                    success: function(resp) {
+                        var response = $.parseJSON(resp);
+                        if (response.status == 'success') {
+                            $t.find('.error-message, .success-message').hide();
+                            $t.prepend('<p class="success-message">' + response.msg + '</p>');
+                        } else {
+                            $t.find('.success-message, .error-message').hide();
+                            $t.prepend('<p class="error-message">' + response.msg + '</p>');
+                        }
+                        $('.loader-icon').html('');
+                    },
+                    error: function(errorThrown) {
+                        console.log(errorThrown);
+                    }
+                });
+                e.preventDefault();
+            },
+            aadi_loadmore: function(e, element, data_values, method_type) {
+                var $t = element;
+                $.ajax({
+                    url: ajaxurl,
+                    type: method_type,
+                    data: data_values,
+                    beforeSend: function(e) {
+                        $("#load-posts a").addClass('active');
+                        $(".loader-img").show();
+                    },
+                    success: function(resp) {
+                        $("#load-posts").remove();
+                        $(".load-more-func").append(resp);
+                        $(".loader-img").hide();
+                        $("#load-posts a").removeClass('active');
+                    },
+                    error: function(errorThrown) {
+                        console.log(errorThrown);
+                    }
+                });
+                e.preventDefault();
+            },
+            aadi_ajaxcall: function() {
+                $(document).delegate('.subscription-form', 'submit', function(e) {
+                    var data = {
+                        action: 'subscribe_customer',
+                        mail: jQuery('.subscription-mail').val(),
+                        lid: jQuery('.listid').val()
+                    };
+                    aadi_page.aadi_ajax(e, $(this), data, 'POST');
+                });
+            },
+            aadi_loadmorecall: function() {
+                $(document).delegate('.load-more-blog-v1', 'click', function(e) {
+                    e.preventDefault();
+                    var data = {
+                        action: 'load_more_functionality',
+                        offset: $(this).data('offset'),
+                        type: 'blog-v1',
+                    };
+                    aadi_page.aadi_loadmore(e, $(this), data, 'POST');
+                });
+                $(document).delegate('.load-more-blog-v2', 'click', function(e) {
+                    e.preventDefault();
+                    var data = {
+                        action: 'load_more_functionality',
+                        offset: $(this).data('offset'),
+                        type: 'blog-v2',
+                    };
+                    aadi_page.aadi_loadmore(e, $(this), data, 'POST');
+                });
+                $(document).delegate('.load-more-blog-v3', 'click', function(e) {
+                    e.preventDefault();
+                    var data = {
+                        action: 'load_more_functionality',
+                        offset: $(this).data('offset'),
+                        type: 'blog-v3',
+                    };
+                    aadi_page.aadi_loadmore(e, $(this), data, 'POST');
+                });
+                $(document).delegate('.load-more-projects', 'click', function(e) {
+                    e.preventDefault();
+                    var data = {
+                        action: 'load_more_functionality',
+                        offset: $(this).data('offset'),
+                        type: 'project-v1',
+                    };
+                    aadi_page.aadi_loadmore(e, $(this), data, 'POST');
+                });
+                $(document).delegate('.load-more-press-media', 'click', function(e) {
+                    e.preventDefault();
+                    var data = {
+                        action: 'load_more_functionality',
+                        offset: $(this).data('offset'),
+                        type: 'press-media',
+                    };
+                    aadi_page.aadi_loadmore(e, $(this), data, 'POST');
+                });
+                $(document).delegate('.load-more-shop-v1', 'click', function(e) {
+                    e.preventDefault();
+                    var data = {
+                        action: 'load_more_functionality',
+                        offset: $(this).data('offset'),
+                        type: 'shop-v1',
+                    };
+                    aadi_page.aadi_loadmore(e, $(this), data, 'POST');
+                });
+            },
+            aadi_incsliders: function(ele, slide_show, slide_scroll, autoplay, autoplayspeed, isfade, isCenter, isVertical) {
+                if (typeof isCenter == 'undefined') {
+                    isCenter = false;
+                }
+                if (typeof isVertical == 'undefined') {
+                    isVertical = false;
+                }
+                if (isCenter) {
+                    var a = [3, 1, 1];
+                } else {
+                    var a = [3, 2, 1];
+                }
+                if (typeof isfade == 'undefined') {
+                    isfade = false;
+                }
+                if (slide_show > 2) {
+                    $('.' + ele).slick({
+                        slidesToShow: slide_show,
+                        slidesToScroll: slide_scroll,
+                        autoplay: true,
+                        speed: 300,
+                        autoplaySpeed: autoplayspeed,
+                        prevArrow: '<a class="slick-prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a>',
+                        nextArrow: '<a class="slick-next"><i class="fa fa-angle-right" aria-hidden="true"></i></a>',
+                        fade: isfade,
+                        vertical: isVertical,
+                        adaptiveHeight: true,
+                        responsive: [{
+                            breakpoint: 1200,
+                            settings: {
+                                slidesToShow: a[0],
+                            }
+                        }, {
+                            breakpoint: 769,
+                            settings: {
+                                slidesToShow: a[1],
+                            }
+                        }, {
+                            breakpoint: 568,
+                            settings: {
+                                slidesToShow: a[2],
+										  vertical:false
+                            }
+                        }]
+                    });
+                } else if (slide_show == 2) {
+                    $('.' + ele).slick({
+                        slidesToShow: slide_show,
+                        slidesToScroll: slide_scroll,
+                        autoplay: true,
+                        speed: 300,
+                        autoplaySpeed: autoplayspeed,
+                        prevArrow: '<a class="slick-prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a>',
+                        nextArrow: '<a class="slick-next"><i class="fa fa-angle-right" aria-hidden="true"></i></a>',
+                        fade: isfade,
+                        vertical: isVertical,
+                        responsive: [{
+                            breakpoint: 769,
+                            settings: {
+                                slidesToShow: 1,
+										  vertical:false
+                            }
+                        }]
+                    });
+                } else {
+                    $('.' + ele).slick({
+                        slidesToShow: slide_show,
+                        slidesToScroll: slide_scroll,
+                        autoplay: true,
+                        speed: 300,
+                        autoplaySpeed: autoplayspeed,
+                        prevArrow: '<a class="slick-prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a>',
+                        nextArrow: '<a class="slick-next"><i class="fa fa-angle-right" aria-hidden="true"></i></a>',
+                        fade: isfade,
+                        vertical: isVertical,
+								responsive: [{
+                            breakpoint: 769,
+                            settings: {
+                                slidesToShow: 1,
+										  vertical:false
+                            }
+                        }]
+                    });
+                }
+            },
+            additab_acc: function(clickele, hideshowele, anim) {
+                if (typeof anim === 'undefined') {
+                    anim = false;
+                }
+                if (typeof clickele === 'undefined') {
+                    $("#accordion > li .accordian-tab").click(function() {
+                        if (false == $(this).next().is(':visible')) {
+                            $('#accordion .accordion-content').slideUp(300);
+                            $('.accordion-arrow i').removeClass('fa-angle-down');
+                            $('.accordion-arrow i').addClass('fa-angle-right');
+                            $('#accordion > li .accordian-tab').removeClass('tab-active');
+                            $('#accordion > li .accordian-tab').addClass('tab-inactive')
+                        }
+                        $(this).next().slideToggle(300);
+                        $(this).toggleClass('tab-inactive tab-active');
+                        $(this).find('i').toggleClass('fa-angle-right fa-angle-down');
+                    });
+                    $('#accordion div.accordion-content:first').show();
+                } else {
+                    if (typeof clickele !== 'undefined' && anim == false) {
+                        $(document).delegate(clickele, 'click', function(e) {
+                            e.preventDefault();
+                            var idx = $(this).index();
+                            var $t = $(this);
+                            $t.closest('.ad-col-row, .aadi-row').find(hideshowele).hide();
+                            $t.closest('.ad-col-row, .aadi-row').find(hideshowele).eq(idx).show();
+                            $t.closest('.ad-col-row, .aadi-row').find(clickele).removeClass('active');
+                            $t.closest(clickele).addClass('active');
+                        });
+                    } else {
+                        $(document).delegate(clickele, 'click', function(e) {
+                            e.preventDefault();
+                            var idx = $(this).index();
+                            var $t = $(this);
+                            $t.closest('.ad-col-row, .aadi-row').find(hideshowele).removeClass('active').removeClass('rightanime').removeClass('leftanime');
+                            $t.closest('.ad-col-row, .aadi-row').find(hideshowele + ':lt(' + idx + ')').addClass('leftanime');
+                            $t.closest('.ad-col-row, .aadi-row').find(hideshowele + ':gt(' + idx + ')').addClass('rightanime');
+                            $t.closest('.ad-col-row, .aadi-row').find(hideshowele).eq(idx).addClass('active');
+                            $t.closest('.ad-col-row, .aadi-row').find(clickele).removeClass('active');
+                            $t.closest(clickele).addClass('active');
+                        });
+                    }
+                }
+            },
+            aadi_sliders: function() {
+                $('.center').on('init', function(event, slick, currentSlide, nextSlide) {
+                    var data = $(".slick-current").next().attr('data-value');
+                    var data_content = $(".slick-current").next().attr('data-content');
+                    var t = $(".slick-current").next();
+                    var dataobj = JSON.parse(data);
+                    $('.ad-team-center-content-wrap .ad-data-head').html(dataobj['data-head']);
+                    $('.ad-team-center-content-wrap .ad-data-designation').html(dataobj['data-designation']);
+                    $('.ad-team-center-content-wrap .ad-data-content').html(data_content);
+                    $('.ad-team-social-content li').remove();
+                    if (dataobj.hasOwnProperty('data-fb')) {
+                        $('.ad-team-center-content-wrap .ad-team-social-content').append('<li class="facebook"> <a href="' + dataobj['data-fb'] + '"><i class="fa fa-facebook"></i></a> </li>');
+                    }
+                    if (dataobj.hasOwnProperty('data-twitter')) {
+                        $('.ad-team-center-content-wrap .ad-team-social-content').append('<li class="twitter"> <a href="' + dataobj['data-twitter'] + '"><i class="fa fa-twitter"></i></a> </li>');
+                    }
+                    if (dataobj.hasOwnProperty('data-gplus')) {
+                        $('.ad-team-center-content-wrap .ad-team-social-content').append('<li class="google"> <a href="' + dataobj['data-gplus'] + '"><i class="fa fa-google-plus"></i></a> </li>');
+                    }
+                    if (dataobj.hasOwnProperty('data-linkedin')) {
+                        $('.ad-team-center-content-wrap .ad-team-social-content').append('<li class="linkedin"> <a href="' + dataobj['data-linkedin'] + '"><i class="fa fa-linkedin"></i></a> </li>');
+                    }
+                });
+                aadi_page.aadi_incsliders('ad-testimonial-slider-wrapper', 1, 1, true, local_vars.adtslider, false, false, true);
+                aadi_page.aadi_incsliders('ad-clients-slider-wrapper', 4, 1, true, local_vars.clientslider);
+                aadi_page.aadi_incsliders('center', 3, 1, true, local_vars.tcslider, false, true);
+                aadi_page.aadi_incsliders('testimonial-slider-type3', 3, 1, true, local_vars.tslider3, false, true);
+                aadi_page.aadi_incsliders('grid-team-slider-v2', 5, 1, true, local_vars.gridtslider2);
+                aadi_page.aadi_incsliders('grid-team-slider', 3, 1, true, local_vars.gridtslider, false, true);
+                aadi_page.aadi_incsliders('grid-testimonial-slider', 3, 1, true, 2000, false, true);
+                aadi_page.aadi_incsliders('square-team-slider', 3, 1, true, local_vars.squaretslider, false, true);
+                aadi_page.aadi_incsliders('square-team-slider-team-detail', 3, 1, true, 2000, false, true);
+                aadi_page.aadi_incsliders('testmonial-slider-2', 1, 1, true, local_vars.tslider2);
+                aadi_page.aadi_incsliders('aadi-testimonial-grid', 3, 1, true, local_vars.tgridslider, false, true);
+                aadi_page.aadi_incsliders('services-slider-shortcode', 2, 1, true, local_vars.servicesslider);
+                $('.aadi-testimonial-grid').on('afterChange', function(event, slick, currentSlide, nextSlide) {
+                    $(".aadi-testimonial-grid .slick-slide").removeClass('slick-center-slide');
+                    $(".aadi-testimonial-grid .slick-current").next().removeClass('slick-center-slide');
+                    $(".aadi-testimonial-grid .slick-current").next().addClass('slick-center-slide');
+                });
+                $('.grid-testimonial-slider').on('afterChange', function(event, slick, currentSlide, nextSlide) {
+                    $(".grid-testimonial-slider .slick-slide").removeClass('slick-center-list');
+                    $(".grid-testimonial-slider .slick-current").next().removeClass('slick-center-list');
+                    $(".grid-testimonial-slider .slick-current").next().addClass('slick-center-list');
+                });
+                $('.grid-team-slider').on('afterChange', function(event, slick, currentSlide, nextSlide) {
+                    $(".grid-team-slider .slick-slide").removeClass('slick-center-active');
+                    $(".grid-team-slider .slick-current").next().removeClass('slick-center-active');
+                    $(".grid-team-slider .slick-current").next().addClass('slick-center-active');
+                });
+                $('.testimonial-slider-type3').on('afterChange', function(event, slick, currentSlide, nextSlide) {
+                    $(".testimonial-slider-type3 .slick-slide").removeClass('slick-center-enable');
+                    $(".testimonial-slider-type3 .slick-current").next().removeClass('slick-center-enable');
+                    $(".testimonial-slider-type3 .slick-current").next().addClass('slick-center-enable');
+                    var data_content = $(".testimonial-slider-type3 .slick-slide").eq(currentSlide).data('content');
+                    $('.testimonial-slider-type3-content').html(data_content);
+                });
+                $('.case-study-slider').slick({
+                    infinite: true,
+                    fade: true,
+                    autoplay: true,
+                    autoplaySpeed: $(this).data('speed'),
+                    pauseOnFocus: true,
+                    pauseOnHover: true,
+                    focusOnSelect: true,
+                    asNavFor: '.case-study-background-scroll',
+                    prevArrow: '<a class="slick-prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a>',
+                    nextArrow: '<a class="slick-next"><i class="fa fa-angle-right" aria-hidden="true"></i></a>',
+                });
+                $('.case-study-background-scroll').slick({
+                    infinite: true,
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                    autoplay: true,
+                    pauseOnFocus: true,
+                    pauseOnHover: true,
+                    focusOnSelect: true,
+                    autoplaySpeed: $(this).data('speed'),
+                    asNavFor: '.case-study-slider',
+                    arrows: false,
+                });
+                $('.center').on('beforeChange', function(event, slick, currentSlide, nextSlide) {
+                    $(".center .slick-slide").removeClass('slick-center-slide');
+                    $(".center .slick-slide .ad-data-head, .slick-slide .ad-data-designation, .slick-slide .ad-data-content").html('');
+                    var slideEle = $('.center [data-slick-index="' + (nextSlide) + '"]');
+                    slideEle.next().addClass('slick-center-slide');
+// console.log($(window).width())
+						if($(window).width() < 769){
+							var data_val = slideEle.attr('data-value');
+							var data_content = slideEle.data('content');
+							var t = slideEle;
+						}
+						else{
+							var data_val = slideEle.next().attr('data-value');
+                    	var data_content = slideEle.next().data('content');
+                    	var t = slideEle.next();
+						}
+                    var dataobj = JSON.parse(data_val);
+                    $('.ad-team-center-content-wrap').fadeOut(150, function() {
+                        $('.ad-team-center-content-wrap .ad-data-head').html(dataobj['data-head']);
+                        $('.ad-team-center-content-wrap .ad-data-designation').html(dataobj['data-designation']);
+                        $('.ad-team-center-content-wrap .ad-data-content').html(data_content);
+                        $('.ad-team-social-content li').remove();
+                        if (dataobj.hasOwnProperty('data-fb')) {
+                            $('.ad-team-center-content-wrap .ad-team-social-content').append('<li class="facebook"> <a href="' + dataobj['data-fb'] + '"><i class="fa fa-facebook"></i></a> </li>');
+                        }
+                        if (dataobj.hasOwnProperty('data-twitter')) {
+                            $('.ad-team-center-content-wrap .ad-team-social-content').append('<li class="twitter"> <a href="' + dataobj['data-twitter'] + '"><i class="fa fa-twitter"></i></a> </li>');
+                        }
+                        if (dataobj.hasOwnProperty('data-gplus')) {
+                            $('.ad-team-center-content-wrap .ad-team-social-content').append('<li class="google"> <a href="' + dataobj['data-gplus'] + '"><i class="fa fa-google-plus"></i></a> </li>');
+                        }
+                        if (dataobj.hasOwnProperty('data-linkedin')) {
+                            $('.ad-team-center-content-wrap .ad-team-social-content').append('<li class="linkedin"> <a href="' + dataobj['data-linkedin'] + '"><i class="fa fa-linkedin"></i></a> </li>');
+                        }
+                        $('.ad-team-center-content-wrap').fadeIn(200)
+                    })
+                });
+            },
+            aadi_grid_sync: function() {
+                $('.gridwrap li').each(function(index, element) {
+                    $(this).outerHeight($('.gridwrap li:eq(0)').css('width'));
+                });
+            }
+        },
+        aadi_OnReady = {
+            init: function() {
+                aadi_page.init();
+            },
+            adScrollEvent: function() {
+                var hHeight = $('.aadi-header').outerHeight();
+                jQuery(window).scroll(function() {
+                    if (jQuery(window).scrollTop() > hHeight) {
+                        jQuery('.aadi-header.aadi-header-sticky').addClass('aadi-header-collaspe');
+                    } else {
+                        jQuery('.aadi-header.aadi-header-sticky').removeClass('aadi-header-collaspe');
+                    }
+                });
+            }
+        };
+    $(function() {
+        aadi_page.aadi_sliders();
+    });
+    jQuery.fn.aadi_footer_parallax = function() {
+        var $footer = $(this);
+        setTimeout(function() {
+            var $total_h = ($footer.css('position') == 'fixed') ? jQuery('#wrapper').outerHeight() : jQuery('#wrapper').outerHeight() - $footer.outerHeight();
+            if ($footer.outerHeight() < jQuery(window).height() && $total_h > jQuery(window).height()) {
+                $footer.css({
+                    'position': '',
+                    'margin': '',
+                    'padding': ''
+                });
+                jQuery('#main').css('margin-bottom', $footer.outerHeight());
+            } else {
+                $footer.css({
+                    'position': 'static',
+                    'margin': '0',
+                    'padding': '0'
+                });
+                jQuery('#main').css({
+                    'margin-bottom': '',
+                    'position': 'relative',
+                    'z-index': 3
+                });
+            }
+        }, 1);
+    }
+    jQuery(document).ready(function() {
+        aadi_OnReady.init();
+        aadi_OnReady.adScrollEvent();
+        jQuery('#ad-mega-menu').appendTo('.ad-mega-menu');
+    });
+})(jQuery);

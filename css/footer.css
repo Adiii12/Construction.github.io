@@ -1,0 +1,87 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+/*----------------------- footer section start -----------------*/
+
+/* footer aboutus start*/
+.footer{
+    background-color: #202020;
+    border: 2px solid #202020;
+}
+.footer-aboutUs h3{
+    color: #fff;
+    margin-bottom: 20px;
+}
+.footer-aboutUs h6{
+  margin-bottom: 15px;
+}
+.footer-aboutUs a{
+    color: #E74C3C;
+}
+.footer-aboutUs a:hover{
+  text-decoration: none;
+  border-bottom: 2px solid #E74C3C;
+  color: #E74C3C;
+}
+/* footer aboutus end*/
+
+/* footer contact info start*/
+.footer-contact-info{
+    display: flex;
+    flex-direction: column;
+    
+}
+.footer-contact-info h3{
+    color: #fff;
+    margin-bottom: 20px;
+}
+.footer-contact-info a:hover{
+    text-decoration: none;
+    color: #E74C3C!important;
+}
+.footer-contact-info .fas{
+    padding-right: 10px;
+}
+ /* footer contact info end*/
+
+ /*---- footer-useful-links start ---*/
+ .footer-useful-links h3{
+     color: #fff;
+     margin-bottom: 20px;
+ }
+ .footer-useful-links a:hover{
+  color: #E74C3C!important;
+  text-decoration: none;
+ }
+ /*----- footer-useful-links end ---*/
+
+ /*--- footer form start ----*/
+ .footer-form #exampleInputMessage{
+     padding-bottom: 50px;
+     border-radius: 0px;
+ }
+ .footer-form input{
+    border-radius: 0px;
+ }
+ .footer-form input:focus{
+     outline: none;
+     box-shadow: none;
+ }
+ .footer-form button{
+  border-radius: 0!important;
+  background-color: #E74C3C;
+  color: #fff;
+ }
+ .footer-form button:hover{
+     background-color: #fff;
+     color: #E74C3C;
+ }
+ .footer-form button:focus{
+     outline: none;
+     box-shadow: none;
+ }
+
+
+/*---------------------------- footer section end ------------*/

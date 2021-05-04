@@ -1,0 +1,23 @@
+*{
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+}
+#navbarSupportedContent .nav-item a{
+    color: #fff;
+    font-weight: bolder;
+    font-size: large;
+}
+#fix-topNav{
+    z-index: 999;
+}
+.navBar-top{
+    background-color: #202020;  
+}
+.navBar-top .nav-item .fas{
+    padding-right: 10px;
+    padding-left: 20px;
+}
+.navBar-top .nav-item a{
+    text-decoration: none;
+}

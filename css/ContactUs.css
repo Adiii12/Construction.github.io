@@ -1,0 +1,79 @@
+*{
+    margin: 0;
+    padding:0;
+    box-sizing: border-box;
+}
+.sticky {
+    position: fixed;
+    top: 0;
+    width: 100%;
+  }
+
+
+.google-map p{
+    margin-top: 10px;
+}
+#contactUS-header{
+    background-color: #E74C3C;
+    padding: 25px 10px ;
+}
+#contactUS-header h1{
+    color: #fff;
+}
+
+
+/*------------- contact us form start ------------------*/
+.contactUS-form h1{
+    text-align: center;
+    position: relative;
+    margin-bottom: 30px;
+    padding: 20px 0px;
+    
+}
+.contactUS-form h1::after{
+    content: "";
+    border:2px solid #E74C3C;
+    position: absolute;
+    width: 15vw;
+    bottom: 0%;
+    left: 50%;
+    transform: translate(-50%); 
+}
+
+.contactUS-form .Name-Email-subject input{
+    padding: 20px;
+    border-radius: 0px!important;
+}
+.contactUS-form .Name-Email-subject input:focus{
+    box-shadow: none;
+    outline: none;
+}
+.contactUS-form .contactMessage input{
+    padding-bottom: 100px;
+    border-radius: 0px!important;
+    z-index: -1;
+}
+.contactUS-form .contactMessage:focus{
+    box-shadow: none;
+    outline: none;
+}
+
+.contactUS-form button{
+    padding: 10px 50px;
+    background-color:#E74C3C;
+    color: #fff;
+    font-size: 17px;
+    font-weight: bold;
+    border-radius: 0px!important;
+}
+.contactUS-form button:hover{
+    background-color: #fff;
+    color: #E74C3C;
+    border: 1px solid #E74C3C;
+}
+.contactUS-form button:focus{
+    box-shadow: none;
+    outline: none;
+}
+
+

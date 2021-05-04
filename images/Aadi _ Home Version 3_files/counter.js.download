@@ -1,0 +1,191 @@
+;(function($, undefined) {
+"use strict";
+	$.fn.countdown = function(options){
+		var target_date = new Date(options.target);
+		var d = new Date();
+		var offset = options.timezone;
+		var current_utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+		var target_utc = target_date.getTime() + (target_date.getTimezoneOffset() * 60000);
+		var target= new Date(target_utc + (3600000*offset));
+		var current= new Date(current_utc + (3600000*offset));
+		//var current = new Date();
+		var s = $(this).selector;
+		$(document).ready(function(){
+			$(s).html(counter(current,target,options.format));
+			setInterval('start_counter()',1000);
+		});
+	}
+})(jQuery);
+function start_counter(){
+	var y = jQuery(".counter_year"),mt = jQuery(".counter_month"),w = jQuery(".counter_weeks"),d =jQuery(".counter_days"),h = jQuery(".counter_hours"),m = jQuery('.counter_minutes'),s = jQuery('.counter_seconds');
+	if(parseInt(m.html()) < 0){
+		h.html(parseInt(h.html()-1));
+		m.html(59);
+	}
+	if(parseInt(s.html()) <= 0) {
+		m.html(parseInt(m.html()-1));
+		s.html(60);
+	}
+	if(parseInt(m.html()) <= 0) {
+		jQuery('.counter_seconds').html('59');
+	}
+	s.html(pad(parseInt(s.html()-1)));
+}
+function counter(current,target,format){
+	var target_date = target;
+	//var current_date = new Date();
+	var current_date = current;
+	var minute = 60*1000,second=1000,hour = 60 * 60 * 1000,day = hour * 24,week = day * 7,month = day * 30.45,year = month * 12,total_ms = Math.abs(target_date - current_date);
+	switch(format) {
+		case '1' : 	var years = parseInt(total_ms / year, 10);
+						years = ((years < 10) ? '0'+years : years);
+						total_ms -= years * year;
+						var months = parseInt(total_ms / month, 10);
+						months = ((months < 10) ? '0'+months : months) ;
+						total_ms -= months * month;
+						var days = parseInt(total_ms / day, 10);
+						days = ((days < 10) ? '0'+days : days) ;
+						total_ms -= days * day;
+						var hours = parseInt(total_ms / hour, 10);
+						hours = ((hours < 10) ? '0'+hours : hours) ;
+						total_ms -= hours * hour;
+						var minutes = parseInt(total_ms / minute, 10 );
+						minutes = ((minutes < 10) ? '0'+minutes : minutes) ;
+						total_ms -= minutes * minute;
+						var seconds = parseInt(total_ms / second, 10);
+						seconds = ((seconds < 10) ? '0'+seconds : seconds) ;
+						total_ms -= seconds * second;
+						return [
+							  "<ul class='countdown-wrapper'><li><span class='countdown-label'>YY</span><span class='counter_year counter-value'>" + years + "</span></li>",
+							  "<li><span class='countdown-label'>MM</span><span class='counter_month counter-value'>" + months + "</span></li>",
+							  "<li><span class='countdown-label'>DD</span><span class='counter_days counter-value'>" + days + "</span></li>",
+							  "<li><span class='countdown-label'>HH</span><span class='counter_hours counter-value'>" + hours + "</span></li>",
+							  "<li><span class='countdown-label'>MM</span><span class='counter_minutes counter-value'>" + minutes + "</span></li>",
+							  "<li></span><span class='countdown-label'>SS</span><span class='counter_seconds counter-value'>" + seconds + "</li></ul>"
+						 ].join("");
+						break;
+		case '2'	: 	var years = parseInt(total_ms / year, 10);
+						years = ((years < 10) ? '0'+years : years);
+						total_ms -= years * year;
+						var months = parseInt(total_ms / month, 10);
+						months = ((months < 10) ? '0'+months : months) ;
+						total_ms -= months * month;
+						var days = parseInt(total_ms / day, 10);
+						days = ((days < 10) ? '0'+days : days) ;
+						total_ms -= days * day;
+						return [
+							  "<ul class='countdown-wrapper'>",
+							  "<li><span class='countdown-label'>YY</span><span class='counter_year counter-value'>" + years + "</span></li>",
+							  "<li><span class='countdown-label'>MM</span><span class='counter_month counter-value'>" + months + "</span></li>",
+							  "<li><span class='countdown-label'>DD</span><span class='counter_days counter-value'>" + days + "</span></li></ul>"
+						 ].join("");
+						break;
+		case '3' 	: 	var months = parseInt(total_ms / month, 10);
+						months = ((months < 10) ? '0'+months : months);
+						total_ms -= months * month;
+						var days = parseInt(total_ms / day, 10);
+						days = ((days < 10) ? '0'+days : days) ;
+						total_ms -= days * day;
+						var hours = parseInt(total_ms / hour, 10);
+						hours = ((hours < 10) ? '0'+hours : hours) ;
+						total_ms -= hours * hour;
+						return [
+							  "<ul class='countdown-wrapper'>",
+							  "<li><span class='countdown-label'>MM</span><span class='counter_month counter-value'>" + months + "</span></li>",
+							  "<li><span class='countdown-label'>DD</span><span class='counter_days counter-value'>" + days + "</span></li>",
+							  "<li><span class='countdown-label'>HH</span><span class='counter_hours counter-value'>" + hours + "</span></li></ul>"
+						 ].join("");
+						break;
+		case '4'	: 	var days = parseInt(total_ms / day, 10);
+						days = ((days < 10) ? '0'+days : days) ;
+						total_ms -= days * day;
+						var hours = parseInt(total_ms / hour, 10);
+						hours = ((hours < 10) ? '0'+hours : hours);
+						total_ms -= hours * hour;
+						var minutes = parseInt(total_ms / minute, 10 );
+						minutes = ((minutes < 10) ? '0'+minutes : minutes);
+						total_ms -= minutes * minute;
+						var seconds = parseInt(total_ms / second, 10);
+						seconds = ((seconds < 10) ? '0'+seconds : seconds);
+						total_ms -= seconds * second;
+						return [
+							  "<ul class='ad-list-inline-block countdown-wrapper'>",
+							  "<li><span class='counter-number counter_days counter-value'>" + days + "</span><span class='countdown-label'>Days</span></li>",
+							  "<li><span class='counter-number counter_hours counter-value'>" + hours + "</span><span class='countdown-label'>hours</span></li>",
+							  "<li><span class='counter-number counter_minutes counter-value'>" + minutes + "</span><span class='countdown-label'>minutes</span></li>",
+							  "<li><span class='counter-number counter_seconds counter-value'>" + seconds + "</span><span class='countdown-label'>seconds</span></li></ul>"
+
+						 ].join("");
+						break;
+
+		case '5'	: 	var days = parseInt(total_ms / day, 10);
+						days = ((days < 10) ? '0'+days : days) ;
+						total_ms -= days * day;
+						var hours = parseInt(total_ms / hour, 10);
+						hours = ((hours < 10) ? '0'+hours : hours) ;
+						total_ms -= hours * hour;
+						var minutes = parseInt(total_ms / minute, 10 );
+						minutes = ((minutes < 10) ? '0'+minutes : minutes);
+						total_ms -= minutes * minute;
+						return [
+							  "<ul class='countdown-wrapper'>",
+							  "<li><span class='countdown-label'>DD</span><span class='counter_days counter-value'>" + days + "</span></li>",
+							  "<li><span class='countdown-label'>HH</span><span class='counter_hours counter-value'>" + hours + "</span></li>",
+							  "<li><span class='countdown-label'>MM</span><span class='counter_minutes counter-value'>" + minutes + "</span></li>",
+							  "</ul>"
+						 ].join("");
+						break;
+		case '6'	: 	var hours = parseInt(total_ms / hour, 10);
+						hours = ((hours < 10) ? '0'+hours : hours) ;
+						total_ms -= hours * hour;
+						var minutes = parseInt(total_ms / minute, 10 );
+						minutes = ((minutes < 10) ? '0'+minutes : minutes) ;
+						total_ms -= minutes * minute;
+						var seconds = parseInt(total_ms / second, 10);
+						seconds = ((seconds < 10) ? '0'+seconds : seconds) ;
+						total_ms -= seconds * second;
+						return [
+							  "<ul class='countdown-wrapper'>",
+							  "<li><span class='countdown-label'>HH</span><span class='counter_hours counter-value'>" + hours + "</span></li>",
+							  "<li><span class='countdown-label'>MM</span><span class='counter_minutes counter-value'>" + minutes + "</span></li>",
+							  "<li><span class='countdown-label'>SS</span><span class='counter_seconds counter-value'>" + seconds + "</span></li></ul>"
+						 ].join("");
+						break;
+		case '7'	: 	var weeks = parseInt(total_ms / week, 10);
+						weeks = ((weeks < 10) ? '0'+weeks : weeks) ;
+						total_ms -= weeks * week;
+						var days = parseInt(total_ms / day, 10);
+						days = ((days < 10) ? '0'+days : days) ;
+						total_ms -= days * day;
+						var hours = parseInt(total_ms / hour, 10);
+						hours = ((hours < 10) ? '0'+hours : hours) ;
+						total_ms -= hours * hour;
+						var minutes = parseInt(total_ms / minute, 10 );
+						minutes = ((minutes < 10) ? '0'+minutes : minutes) ;
+						total_ms -= minutes * minute;
+						var seconds = parseInt(total_ms / second, 10);
+						seconds = ((seconds < 10) ? '0'+seconds : seconds);
+						total_ms -= seconds * second;
+						return [
+							  "<ul class='countdown-wrapper ad-list-inline-block ad-counter-listing'>",
+							  "<li><h2 class='counter_days counter-value'>" + days + "</h2><span class='countdown-label'>DAYS</span></li>",
+							  "<li><span class='countdown-label timer-separator'>:</span><h2 class='counter_hours counter-value'>" + hours + "</h2><span class='countdown-label'>H</span></li>",
+							  "<li><span class='countdown-label timer-separator'>:</span><h2 class='counter_minutes counter-value'>" + minutes + "</h2><span class='countdown-label'>M</span></li>",
+							  "<li><span class='countdown-label timer-separator'>:</span><h2 class='counter_seconds counter-value'>" + seconds + "</h2><span class='countdown-label'>S</span></li></ul>"
+						 ].join("");
+						break;
+		case '8'	: 	var days = parseInt(total_ms / day, 10);
+						days = ((days < 10) ? '0'+days : days) ;
+						total_ms -= days * day;
+						return [
+							  "<ul class='countdown-wrapper'>",
+							  "<li><span class='countdown-label'>Days</span><span class='counter_days counter-value'>" + days + "</span></li>",
+							  "</ul>"
+						 ].join("");
+						break;
+	}
+}
+function pad (str) {
+  	if(str <= 9) {str = '0' + str;}
+	return str;
+}
